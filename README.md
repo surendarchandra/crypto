@@ -46,3 +46,27 @@ Understand the slow performance of GCM is a TODO item.
 | XTS-256 | Encrypt |                    | 3626.21             |          |
 | XTS-256 | Decrypt |                    | 3626.95             |          |
 
+# Multihash SHA1
+Multihash is described in
+    "Multi-Hash: A Family of Cryptographic Hash Algorithm Extensions"
+      - Sean Gulley, Vinodh Gopal, Jim Guilford, Kirk Yap, Wajdi Feghali, Intel.
+
+The data is SHA1'd in parallel and the resulting hashes are finally SHA1'd.
+The hash value produced is not the same as with SHA1; however it is fast.
+This hashing function is useful for cases where cryptographic nature of
+SHA1 is useful (though binary comptabilitiy isn't important). E.g., hash
+data to randomize it.
+
+## Hash Performance:
+ - 3.5GHz Intel Core 7 (last 2013), running Mac OSX High Sierra.
+ - SHA1 performance was measured using 'go test -test.bench .' on the Go source tree.
+
+| Buffer Size | SHA1 (MB/s) | MSHA1 (MB/s) |
+|-------------|-------------|--------------|
+|    8 B      |   44.2      | 3.55         |
+|  320 B      |  478.53     | 142.58       |
+|    1 KiB    |  787.20     | 394.46       |
+|    4 KiB    |  974.68     | 1157.37      |
+|    8 KiB    | 1008.99     | 1746.71      |
+|   16 KiB    | 1034.76     | 2729.45      |
+
